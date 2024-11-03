@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enter Tracking Number</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; padding-top: 20%; }
+        input[type="text"] { font-size: 24px; padding: 10px; width: 80%; }
+        button { font-size: 18px; padding: 10px 20px; }
+    </style>
+</head>
+<body>
+    <h2>Scan or Enter Tracking Number</h2>
+    <input type="text" id="trackingNumber" autofocus placeholder="Scan here">
+    <button onclick="submitTracking()">Submit</button>
+
+    <script>
+        function submitTracking() {
+            const trackingNumber = document.getElementById("trackingNumber").value;
+            if (trackingNumber) {
+                fetch("https://hook.eu1.make.com/x1xnxakxbly8a71rnuy8mrk4rqsl6b2g", { // Your Make.com webhook URL
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({ "tracking_number": trackingNumber })
+                })
+                .then(response => {
+                    if (response.ok) {
+                        alert("Tracking Number Submitted");
+                        document.getElementById("trackingNumber").value = ""; // Clear input field after submission
+                    } else {
+                        alert("Error: Tracking number not submitted.");
+                    }
+                })
+                .catch(error => alert("Error: " + error));
+            } else {
+                alert("Please enter or scan a tracking number.");
+            }
+        }
+    </script>
+</body>
+</html>
